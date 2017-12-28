@@ -62,16 +62,43 @@ int main(void)
     }
     
     // load shaders
-    Shader* aShader = new Shader("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
-    std::cout << aShader << std::endl;
+    Shader shaderProgram("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
     
     // set up viewport size
-    glViewport(0, 0, 800, 600);
+    //glViewport(0, 0, 800, 600);
     
     // timing
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
 
+    // set up a rectangle
+    float vertices[] = {
+        0.5f,  0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+        -0.5f,  0.5f, 0.0f
+    };
+    unsigned int indices[] = {
+        0, 1, 3,
+        1, 2, 3
+    };
+    unsigned int VBO, VAO, EBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
     // main game loop
     while(!glfwWindowShouldClose(window))
     {
@@ -87,6 +114,12 @@ int main(void)
         // render
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+        
+        // draw a rectangle
+        shaderProgram.use();
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
         
         // swap buffers
         glfwPollEvents();
