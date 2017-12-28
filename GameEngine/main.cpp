@@ -8,7 +8,12 @@
 #include <iostream>
 
 #include <glad/glad.h>
+
+#pragma clang diagnostic ignored "-Wdocumentation"
 #include <GLFW/glfw3.h>
+#pragma clang diagnostic pop
+
+#include "Shader.hpp"
 
 // input handling function
 void processInput(GLFWwindow *window)
@@ -56,12 +61,25 @@ int main(void)
         return -1;
     }
     
+    // load shaders
+    Shader* aShader = new Shader("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
+    std::cout << aShader << std::endl;
+    
     // set up viewport size
     glViewport(0, 0, 800, 600);
     
+    // timing
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
+
     // main game loop
     while(!glfwWindowShouldClose(window))
     {
+        // frame timing
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+        
         // handle input
         processInput(window);
 
@@ -71,8 +89,8 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         
         // swap buffers
-        glfwSwapBuffers(window);
         glfwPollEvents();
+        glfwSwapBuffers(window);
     }
     
     // free resources
