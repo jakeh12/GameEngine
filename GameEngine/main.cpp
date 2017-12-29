@@ -125,6 +125,19 @@ int main(void)
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
     
+    glm::vec3 cubePositions[] = {
+        glm::vec3( 0.0f,  0.0f,  0.0f),
+        glm::vec3( 2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3( 2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3( 1.3f, -2.0f, -2.5f),
+        glm::vec3( 1.5f,  2.0f, -2.5f),
+        glm::vec3( 1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+    
     GLuint VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -175,17 +188,20 @@ int main(void)
     
     // set up matrices
     glm::mat4 model;
-    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    shaderProgram.setUniform("model", model);
+    //model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    //shaderProgram.setUniform("model", model);
     
     glm::mat4 view;
     // translating the scene in the reverse direction is where we want to move
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -10.0f));
     shaderProgram.setUniform("view", view);
 
     glm::mat4 projection;
     projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
     shaderProgram.setUniform("projection", projection);
+
+    
+    float angle = 0.0f;
 
     // main game loop
     while(!glfwWindowShouldClose(window))
@@ -199,8 +215,8 @@ int main(void)
         processInput(window);
         
         // update matrix
-        model = glm::rotate(model, glm::radians(deltaTime*10.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-        shaderProgram.setUniform("model", model);
+        //model = glm::rotate(model, glm::radians(deltaTime*10.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+        //shaderProgram.setUniform("model", model);
 
         // render
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -213,14 +229,24 @@ int main(void)
         // draw rectangle
         shaderProgram.use();
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        
+        for (int i = 0; i < 10; i++)
+        {
+            model = glm::mat4();
+            model = glm::translate(model, cubePositions[i]);
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.2f));
+            shaderProgram.setUniform("model", model);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            angle += deltaTime * 100;
+        }
+
         // swap buffers
-        glfwPollEvents();
         glfwSwapBuffers(window);
+        glfwPollEvents();
     }
     
     // free resources
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
     glfwTerminate();
     return 0;
 }

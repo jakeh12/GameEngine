@@ -13,6 +13,7 @@
 		6727663F1FF55E9100A573B8 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 6727663E1FF55E9100A573B8 /* glad.c */; };
 		672766421FF57B2700A573B8 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 672766401FF57B2700A573B8 /* Shader.cpp */; };
 		67A182BA1FF656A100DE1B01 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67A182B91FF656A100DE1B01 /* stb_image.cpp */; };
+		67A182BF1FF66DC100DE1B01 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67A182BD1FF66DC100DE1B01 /* Camera.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +42,8 @@
 		67A182B91FF656A100DE1B01 /* stb_image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stb_image.cpp; sourceTree = "<group>"; };
 		67A182BB1FF656C300DE1B01 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		67A182BC1FF65A5300DE1B01 /* awesomeface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = awesomeface.png; sourceTree = "<group>"; };
+		67A182BD1FF66DC100DE1B01 /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
+		67A182BE1FF66DC100DE1B01 /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +87,8 @@
 				672766401FF57B2700A573B8 /* Shader.cpp */,
 				672766411FF57B2700A573B8 /* Shader.hpp */,
 				67A182B91FF656A100DE1B01 /* stb_image.cpp */,
+				67A182BD1FF66DC100DE1B01 /* Camera.cpp */,
+				67A182BE1FF66DC100DE1B01 /* Camera.hpp */,
 			);
 			path = GameEngine;
 			sourceTree = "<group>";
@@ -174,6 +179,7 @@
 			files = (
 				672766211FF52B2E00A573B8 /* main.cpp in Sources */,
 				67A182BA1FF656A100DE1B01 /* stb_image.cpp in Sources */,
+				67A182BF1FF66DC100DE1B01 /* Camera.cpp in Sources */,
 				672766421FF57B2700A573B8 /* Shader.cpp in Sources */,
 				6727663F1FF55E9100A573B8 /* glad.c in Sources */,
 			);
