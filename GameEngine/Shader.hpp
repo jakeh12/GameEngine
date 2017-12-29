@@ -12,7 +12,8 @@
 #include <glad/glad.h>
 
 #pragma clang diagnostic ignored "-Wdocumentation"
-#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #pragma clang diagnostic pop
 
 #include <iostream>
@@ -33,6 +34,7 @@ public:
     void setUniform(std::string name, GLuint value);
     void setUniform(std::string name, GLint value);
     void setUniform(std::string name, GLfloat value);
+    void setUniform(std::string name, glm::mat4 value);
 };
 
 #endif /* Shader_hpp */
