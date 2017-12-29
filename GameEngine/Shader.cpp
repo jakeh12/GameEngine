@@ -139,3 +139,23 @@ Shader::~Shader()
 {
     glDeleteProgram(id);
 }
+
+GLuint Shader::uniformLocation(std::string &uniformName)
+{
+    return glGetUniformLocation(id, uniformName.c_str());
+}
+
+void Shader::setUniform(std::string name, GLuint value)
+{
+    glUniform1ui(uniformLocation(name), value);
+}
+
+void Shader::setUniform(std::string name, GLint value)
+{
+    glUniform1i(uniformLocation(name), value);
+}
+
+void Shader::setUniform(std::string name, GLfloat value)
+{
+    glUniform1f(uniformLocation(name), value);
+}

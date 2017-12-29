@@ -25,10 +25,14 @@ private:
     GLuint id;
     void checkShaderCompileErrors(GLuint shader);
     void checkProgramCompileErrors(GLuint program);
+    GLuint uniformLocation(std::string &uniformName);
 public:
     Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
     ~Shader();
     void use();
+    void setUniform(std::string name, GLuint value);
+    void setUniform(std::string name, GLint value);
+    void setUniform(std::string name, GLfloat value);
 };
 
 #endif /* Shader_hpp */

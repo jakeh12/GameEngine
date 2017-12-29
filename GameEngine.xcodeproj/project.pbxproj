@@ -12,6 +12,7 @@
 		6727662D1FF545CD00A573B8 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6727662C1FF545CD00A573B8 /* OpenGL.framework */; };
 		6727663F1FF55E9100A573B8 /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 6727663E1FF55E9100A573B8 /* glad.c */; };
 		672766421FF57B2700A573B8 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 672766401FF57B2700A573B8 /* Shader.cpp */; };
+		67A182BA1FF656A100DE1B01 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67A182B91FF656A100DE1B01 /* stb_image.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,10 @@
 		672766411FF57B2700A573B8 /* Shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shader.hpp; sourceTree = "<group>"; };
 		672766441FF598EA00A573B8 /* vertex_shader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = vertex_shader.glsl; sourceTree = "<group>"; };
 		672766451FF598FE00A573B8 /* fragment_shader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = fragment_shader.glsl; sourceTree = "<group>"; };
+		67A182B81FF652ED00DE1B01 /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
+		67A182B91FF656A100DE1B01 /* stb_image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stb_image.cpp; sourceTree = "<group>"; };
+		67A182BB1FF656C300DE1B01 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
+		67A182BC1FF65A5300DE1B01 /* awesomeface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = awesomeface.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,11 +76,14 @@
 		6727661F1FF52B2E00A573B8 /* GameEngine */ = {
 			isa = PBXGroup;
 			children = (
+				67A182BB1FF656C300DE1B01 /* stb_image.h */,
+				67A182B71FF652B700DE1B01 /* textures */,
 				672766431FF5989300A573B8 /* shaders */,
 				6727663E1FF55E9100A573B8 /* glad.c */,
 				672766201FF52B2E00A573B8 /* main.cpp */,
 				672766401FF57B2700A573B8 /* Shader.cpp */,
 				672766411FF57B2700A573B8 /* Shader.hpp */,
+				67A182B91FF656A100DE1B01 /* stb_image.cpp */,
 			);
 			path = GameEngine;
 			sourceTree = "<group>";
@@ -96,6 +104,15 @@
 				672766451FF598FE00A573B8 /* fragment_shader.glsl */,
 			);
 			path = shaders;
+			sourceTree = "<group>";
+		};
+		67A182B71FF652B700DE1B01 /* textures */ = {
+			isa = PBXGroup;
+			children = (
+				67A182BC1FF65A5300DE1B01 /* awesomeface.png */,
+				67A182B81FF652ED00DE1B01 /* container.jpg */,
+			);
+			path = textures;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -156,6 +173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				672766211FF52B2E00A573B8 /* main.cpp in Sources */,
+				67A182BA1FF656A100DE1B01 /* stb_image.cpp in Sources */,
 				672766421FF57B2700A573B8 /* Shader.cpp in Sources */,
 				6727663F1FF55E9100A573B8 /* glad.c in Sources */,
 			);
