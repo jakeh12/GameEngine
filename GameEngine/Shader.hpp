@@ -20,21 +20,22 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+using namespace std;
 
 class Shader {
 private:
     GLuint id;
     void checkShaderCompileErrors(GLuint shader);
     void checkProgramCompileErrors(GLuint program);
-    GLuint uniformLocation(std::string &uniformName);
+    GLuint uniformLocation(string &uniformName);
 public:
     Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath = nullptr);
     ~Shader();
     void use();
-    void setUniform(std::string name, GLuint value);
-    void setUniform(std::string name, GLint value);
-    void setUniform(std::string name, GLfloat value);
-    void setUniform(std::string name, glm::mat4 value);
+    void setUniform(string name, GLuint value);
+    void setUniform(string name, GLint value);
+    void setUniform(string name, GLfloat value);
+    void setUniform(string name, glm::mat4 value);
 };
 
 #endif /* Shader_hpp */

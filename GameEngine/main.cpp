@@ -15,18 +15,49 @@
 #include <glm/gtc/type_ptr.hpp>
 #pragma clang diagnostic pop
 
-#include "Shader.hpp"
 #include "stb_image.h"
+
+#include "Shader.hpp"
+#include "Camera.hpp"
+#include "Model.hpp"
 
 const int screenWidth = 800;
 const int screenHeight = 600;
 
+Camera camera;
+
+// mouse input callback
+void cursorPositionCallback(GLFWwindow* window, double xpos, double ypos)
+{
+    static float lastX = xpos, lastY = ypos;
+    float xOffset = (float)(xpos - lastX);
+    float yOffset = (float)(lastY - ypos); // reverse y-axis coordinates
+    
+    // update camera euler angles
+    camera.processOrientation(xOffset, yOffset);
+    
+    lastX = xpos;
+    lastY = ypos;
+}
+
 // input handling function
-void processInput(GLFWwindow *window)
+void processInput(GLFWwindow *window, float deltaTime)
 {
     // if escape is pressed, close the application
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+    
+    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        camera.processPosition(FORWARD, deltaTime);
+    
+    if(glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        camera.processPosition(BACKWARD, deltaTime);
+    
+    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        camera.processPosition(LEFT, deltaTime);
+    
+    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        camera.processPosition(RIGHT, deltaTime);
 }
 
 int main(void)
@@ -47,9 +78,11 @@ int main(void)
 #endif
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
+    // enable msaa 4x
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    
     // create a window
-    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "GameEngine", nullptr,
-                                          nullptr);
+    GLFWwindow* window = glfwCreateWindow(screenWidth, screenHeight, "GameEngine", nullptr, nullptr);
     if (window == nullptr)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -60,7 +93,13 @@ int main(void)
     // set current context to the window
     glfwMakeContextCurrent(window);
     
-    // initialize glew
+    // set cursor position callback
+    glfwSetCursorPosCallback(window, cursorPositionCallback);
+    
+    // catch mouse cursor inside the window
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    
+    // initialize glad
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -69,63 +108,34 @@ int main(void)
     
     // enable depth testing
     glEnable(GL_DEPTH_TEST);
-
+    
+    // enable alpha blending
+    glEnable(GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
     // load shaders
     Shader shaderProgram("shaders/vertex_shader.glsl", "shaders/fragment_shader.glsl");
-    
-    // set up viewport size
-    //glViewport(0, 0, 800, 600);
-    
+    shaderProgram.use();
+
+    // load model
+    Model modelData("models/mushroom/mushroom.obj");
+
     // timing
     float deltaTime = 0.0f;
     float lastFrame = 0.0f;
     
-    // set up triangle
-    float vertices[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-        
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
+    // set up camera
+    camera = Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f);
+    glm::mat4 view;
+    view = camera.getViewMatrix();
+    shaderProgram.setUniform("view", view);
     
-    glm::vec3 cubePositions[] = {
+    // set up projection matrix
+    glm::mat4 projection;
+    projection = glm::perspective(glm::radians(60.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
+    shaderProgram.setUniform("projection", projection);
+    
+    glm::vec3 modelPositions[] = {
         glm::vec3( 0.0f,  0.0f,  0.0f),
         glm::vec3( 2.0f,  5.0f, -15.0f),
         glm::vec3(-1.5f, -2.2f, -2.5f),
@@ -138,71 +148,6 @@ int main(void)
         glm::vec3(-1.3f,  1.0f, -1.5f)
     };
     
-    GLuint VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    
-    glBindVertexArray(VAO);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-    // texture coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-    
-    // create texture
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    // set texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    int width, height, numOfChannels;
-    // flip image vertically on load
-    stbi_set_flip_vertically_on_load(true);
-    // load image
-    unsigned char *data = stbi_load("textures/awesomeface.png", &width, &height, &numOfChannels, 0);
-    if (data)
-    {
-        // load data into gpu
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    // free resources
-    stbi_image_free(data);
-    
-    shaderProgram.use();
-    shaderProgram.setUniform("aTexture", 0);
-    
-    // set up matrices
-    glm::mat4 model;
-    //model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    //shaderProgram.setUniform("model", model);
-    
-    glm::mat4 view;
-    // translating the scene in the reverse direction is where we want to move
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -10.0f));
-    shaderProgram.setUniform("view", view);
-
-    glm::mat4 projection;
-    projection = glm::perspective(glm::radians(45.0f), (float)screenWidth / (float)screenHeight, 0.1f, 100.0f);
-    shaderProgram.setUniform("projection", projection);
-
-    
-    float angle = 0.0f;
-
     // main game loop
     while(!glfwWindowShouldClose(window))
     {
@@ -212,41 +157,32 @@ int main(void)
         lastFrame = currentFrame;
         
         // handle input
-        processInput(window);
+        processInput(window, deltaTime);
+        view = camera.getViewMatrix();
+        shaderProgram.setUniform("view", view);
         
-        // update matrix
-        //model = glm::rotate(model, glm::radians(deltaTime*10.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-        //shaderProgram.setUniform("model", model);
-
         // render
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // activate textures
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        
-        // draw rectangle
-        shaderProgram.use();
-        glBindVertexArray(VAO);
+        // render models
         for (int i = 0; i < 10; i++)
         {
-            model = glm::mat4();
-            model = glm::translate(model, cubePositions[i]);
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.2f));
+            shaderProgram.use();
+            glm::mat4 model = glm::mat4();
+            model = glm::rotate(model, glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+            model = glm::translate(model, modelPositions[i]);
+            model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));    // it's a bit too big for our scene, so scale it down
             shaderProgram.setUniform("model", model);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-            angle += deltaTime * 100;
+            modelData.Draw(shaderProgram);
         }
-
+        
         // swap buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
     
     // free resources
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
     glfwTerminate();
     return 0;
 }

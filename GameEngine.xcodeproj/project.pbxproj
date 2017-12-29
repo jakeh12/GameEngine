@@ -14,6 +14,9 @@
 		672766421FF57B2700A573B8 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 672766401FF57B2700A573B8 /* Shader.cpp */; };
 		67A182BA1FF656A100DE1B01 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67A182B91FF656A100DE1B01 /* stb_image.cpp */; };
 		67A182BF1FF66DC100DE1B01 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67A182BD1FF66DC100DE1B01 /* Camera.cpp */; };
+		67A182C31FF69B7900DE1B01 /* Mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67A182C11FF69B7900DE1B01 /* Mesh.cpp */; };
+		67A182C61FF69D0A00DE1B01 /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67A182C41FF69D0A00DE1B01 /* Model.cpp */; };
+		67A182C91FF6A0C700DE1B01 /* libassimp.4.1.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 67A182C81FF6A0C600DE1B01 /* libassimp.4.1.0.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,12 +41,18 @@
 		672766411FF57B2700A573B8 /* Shader.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Shader.hpp; sourceTree = "<group>"; };
 		672766441FF598EA00A573B8 /* vertex_shader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = vertex_shader.glsl; sourceTree = "<group>"; };
 		672766451FF598FE00A573B8 /* fragment_shader.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = fragment_shader.glsl; sourceTree = "<group>"; };
-		67A182B81FF652ED00DE1B01 /* container.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = container.jpg; sourceTree = "<group>"; };
 		67A182B91FF656A100DE1B01 /* stb_image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stb_image.cpp; sourceTree = "<group>"; };
 		67A182BB1FF656C300DE1B01 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
-		67A182BC1FF65A5300DE1B01 /* awesomeface.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = awesomeface.png; sourceTree = "<group>"; };
 		67A182BD1FF66DC100DE1B01 /* Camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Camera.cpp; sourceTree = "<group>"; };
 		67A182BE1FF66DC100DE1B01 /* Camera.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Camera.hpp; sourceTree = "<group>"; };
+		67A182C11FF69B7900DE1B01 /* Mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mesh.cpp; sourceTree = "<group>"; };
+		67A182C21FF69B7900DE1B01 /* Mesh.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Mesh.hpp; sourceTree = "<group>"; };
+		67A182C41FF69D0A00DE1B01 /* Model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
+		67A182C51FF69D0A00DE1B01 /* Model.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Model.hpp; sourceTree = "<group>"; };
+		67A182C81FF6A0C600DE1B01 /* libassimp.4.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.4.1.0.dylib; path = ../../../../../usr/local/Cellar/assimp/4.1.0/lib/libassimp.4.1.0.dylib; sourceTree = "<group>"; };
+		67A2765C1FF6CD4600B84B7F /* mushroom.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mushroom.obj; sourceTree = "<group>"; };
+		67A2765D1FF6CD4600B84B7F /* mushroom.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mushroom.mtl; sourceTree = "<group>"; };
+		67A2765E1FF6CF9900B84B7F /* mushroom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mushroom.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67A182C91FF6A0C700DE1B01 /* libassimp.4.1.0.dylib in Frameworks */,
 				6727662D1FF545CD00A573B8 /* OpenGL.framework in Frameworks */,
 				6727662B1FF52B6000A573B8 /* libglfw.3.2.dylib in Frameworks */,
 			);
@@ -79,11 +89,15 @@
 		6727661F1FF52B2E00A573B8 /* GameEngine */ = {
 			isa = PBXGroup;
 			children = (
+				67A182C71FF69E8900DE1B01 /* models */,
 				67A182BB1FF656C300DE1B01 /* stb_image.h */,
-				67A182B71FF652B700DE1B01 /* textures */,
 				672766431FF5989300A573B8 /* shaders */,
 				6727663E1FF55E9100A573B8 /* glad.c */,
 				672766201FF52B2E00A573B8 /* main.cpp */,
+				67A182C11FF69B7900DE1B01 /* Mesh.cpp */,
+				67A182C21FF69B7900DE1B01 /* Mesh.hpp */,
+				67A182C41FF69D0A00DE1B01 /* Model.cpp */,
+				67A182C51FF69D0A00DE1B01 /* Model.hpp */,
 				672766401FF57B2700A573B8 /* Shader.cpp */,
 				672766411FF57B2700A573B8 /* Shader.hpp */,
 				67A182B91FF656A100DE1B01 /* stb_image.cpp */,
@@ -96,6 +110,7 @@
 		672766271FF52B4F00A573B8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				67A182C81FF6A0C600DE1B01 /* libassimp.4.1.0.dylib */,
 				6727662C1FF545CD00A573B8 /* OpenGL.framework */,
 				6727662A1FF52B6000A573B8 /* libglfw.3.2.dylib */,
 			);
@@ -111,13 +126,22 @@
 			path = shaders;
 			sourceTree = "<group>";
 		};
-		67A182B71FF652B700DE1B01 /* textures */ = {
+		67A182C71FF69E8900DE1B01 /* models */ = {
 			isa = PBXGroup;
 			children = (
-				67A182BC1FF65A5300DE1B01 /* awesomeface.png */,
-				67A182B81FF652ED00DE1B01 /* container.jpg */,
+				67A2765A1FF6CD4600B84B7F /* mushroom */,
 			);
-			path = textures;
+			path = models;
+			sourceTree = "<group>";
+		};
+		67A2765A1FF6CD4600B84B7F /* mushroom */ = {
+			isa = PBXGroup;
+			children = (
+				67A2765E1FF6CF9900B84B7F /* mushroom.png */,
+				67A2765C1FF6CD4600B84B7F /* mushroom.obj */,
+				67A2765D1FF6CD4600B84B7F /* mushroom.mtl */,
+			);
+			path = mushroom;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,9 +201,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67A182C31FF69B7900DE1B01 /* Mesh.cpp in Sources */,
 				672766211FF52B2E00A573B8 /* main.cpp in Sources */,
 				67A182BA1FF656A100DE1B01 /* stb_image.cpp in Sources */,
 				67A182BF1FF66DC100DE1B01 /* Camera.cpp in Sources */,
+				67A182C61FF69D0A00DE1B01 /* Model.cpp in Sources */,
 				672766421FF57B2700A573B8 /* Shader.cpp in Sources */,
 				6727663F1FF55E9100A573B8 /* glad.c in Sources */,
 			);
@@ -299,6 +325,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/glfw/3.2.1/lib,
+					/usr/local/Cellar/assimp/4.1.0/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -312,6 +339,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/glfw/3.2.1/lib,
+					/usr/local/Cellar/assimp/4.1.0/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

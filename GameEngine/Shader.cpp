@@ -10,24 +10,24 @@
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geometryPath)
 {
-    std::string vertexCodeString;
-    std::string fragmentCodeString;
-    std::string geometryCodeString;
+    string vertexCodeString;
+    string fragmentCodeString;
+    string geometryCodeString;
 
-    std::ifstream vertexShaderFile;
-    std::ifstream fragmentShaderFile;
-    std::ifstream geometryShaderFile;
+    ifstream vertexShaderFile;
+    ifstream fragmentShaderFile;
+    ifstream geometryShaderFile;
 
-    vertexShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-    fragmentShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-    geometryShaderFile.exceptions (std::ifstream::failbit | std::ifstream::badbit);
+    vertexShaderFile.exceptions (ifstream::failbit | ifstream::badbit);
+    fragmentShaderFile.exceptions (ifstream::failbit | ifstream::badbit);
+    geometryShaderFile.exceptions (ifstream::failbit | ifstream::badbit);
 
     try
     {
         // open files
         vertexShaderFile.open(vertexPath);
         fragmentShaderFile.open(fragmentPath);
-        std::stringstream vertexShaderStream, fragmentShaderStream, geometryShaderStream;
+        stringstream vertexShaderStream, fragmentShaderStream, geometryShaderStream;
         // read file buffer contents into streams
         vertexShaderStream << vertexShaderFile.rdbuf();
         fragmentShaderStream << fragmentShaderFile.rdbuf();
@@ -46,9 +46,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geo
             geometryCodeString = geometryShaderStream.str();
         }
     }
-    catch (std::ifstream::failure e)
+    catch (ifstream::failure e)
     {
-        std::cout << "Error reading shader source file." << std::endl;
+        cout << "Error reading shader source file." << endl;
     }
     const char* vertexShaderCode = vertexCodeString.c_str();
     const char* fragmentShaderCode = fragmentCodeString.c_str();
@@ -109,7 +109,7 @@ void Shader::checkShaderCompileErrors(GLuint shader)
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
         GLchar* info = new GLchar[length];
         glGetShaderInfoLog(shader, length, &length, info);
-        std::cout << "Error during shader compilation:" << std::endl << info << std::endl;
+        cout << "Error during shader compilation:" << endl << info << endl;
         delete[] info;
     }
 }
@@ -125,7 +125,7 @@ void Shader::checkProgramCompileErrors(GLuint program)
         glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
         GLchar* info = new GLchar[length];
         glGetProgramInfoLog(program, length, &length, info);
-        std::cout << "Error during shader program compilation:" << std::endl << info << std::endl;
+        cout << "Error during shader program compilation:" << endl << info << endl;
         delete[] info;
     }
 }
@@ -140,27 +140,27 @@ Shader::~Shader()
     glDeleteProgram(id);
 }
 
-GLuint Shader::uniformLocation(std::string &uniformName)
+GLuint Shader::uniformLocation(string &uniformName)
 {
     return glGetUniformLocation(id, uniformName.c_str());
 }
 
-void Shader::setUniform(std::string name, GLuint value)
+void Shader::setUniform(string name, GLuint value)
 {
     glUniform1ui(uniformLocation(name), value);
 }
 
-void Shader::setUniform(std::string name, GLint value)
+void Shader::setUniform(string name, GLint value)
 {
     glUniform1i(uniformLocation(name), value);
 }
 
-void Shader::setUniform(std::string name, GLfloat value)
+void Shader::setUniform(string name, GLfloat value)
 {
     glUniform1f(uniformLocation(name), value);
 }
 
-void Shader::setUniform(std::string name, glm::mat4 value)
+void Shader::setUniform(string name, glm::mat4 value)
 {
     glUniformMatrix4fv(uniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 }

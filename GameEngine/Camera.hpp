@@ -15,6 +15,15 @@
 #include <glm/gtc/type_ptr.hpp>
 #pragma clang diagnostic pop
 
+
+enum CameraPositionChangeEnum
+{
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT
+};
+
 class Camera
 {
 private:
@@ -33,6 +42,9 @@ private:
     void updateVectors();
 public:
     Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = -90.0f, float pitch = 0.0f);
+    void processOrientation(float xOffset, float yOffset);
+    void processPosition(CameraPositionChangeEnum direction, float deltaTime);
+    glm::mat4 getViewMatrix();
 };
 
 #endif /* Camera_hpp */
