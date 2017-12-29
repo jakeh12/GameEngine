@@ -20,6 +20,7 @@
 #include "Shader.hpp"
 #include "Camera.hpp"
 #include "Model.hpp"
+#include "Terrain.hpp"
 
 const int screenWidth = 800;
 const int screenHeight = 600;
@@ -62,6 +63,8 @@ void processInput(GLFWwindow *window, float deltaTime)
 
 int main(void)
 {
+    Terrain terrain(10);
+    
     // initialize glfw
     if (!glfwInit())
     {
